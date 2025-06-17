@@ -5,7 +5,7 @@ public class RagdollOperations : MonoBehaviour
 {
     public List<Transform> BodyParts;
     public List<Collider> BodyPartColliders;
-    public List<Rigidbody> BodyPartRigs; 
+    public List<Rigidbody> BodyPartRigs;
     public bool HaveMainCollider;
 
     public GameObject MainObject;
@@ -44,10 +44,10 @@ public class RagdollOperations : MonoBehaviour
     {
         foreach (var collider in BodyPartColliders)
         {
-            collider.enabled = enable; 
+            collider.enabled = enable;
         }
     }
-    
+
     public void DoRagdoll(bool isRagdoll)
     {
         foreach (Transform part in BodyParts)
@@ -80,5 +80,23 @@ public class RagdollOperations : MonoBehaviour
             if (rig != null)
                 rig.velocity = Vector3.forward * force;
         }
+    }
+
+    public void ChangeLayerToDead()
+    {
+        foreach (var part in BodyPartColliders)
+        {
+            part.gameObject.layer = 7;
+        }
+    }
+
+    public void ResetCharacter()
+    {
+        foreach (var part in BodyPartColliders)
+        {
+            part.gameObject.layer = 6;
+        }
+        DoRagdoll(false);
+        ChangeColliderState(false); 
     }
 }

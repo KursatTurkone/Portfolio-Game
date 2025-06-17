@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     private int bulletCount;
     private Tween ShootTween;
     private bool isShooting;
+   
     [HideInInspector] public EnemyCollider closestEnemy;
 
     private void Awake()
@@ -105,4 +106,5 @@ public class PlayerManager : MonoBehaviour
             return;
         ShootBullet?.Invoke();
     }
+
 }

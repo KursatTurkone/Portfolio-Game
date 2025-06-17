@@ -24,7 +24,7 @@ public class Bullets : MonoBehaviour
     {
         if (!startMoveForward)
             return;
-        transform.Translate(Vector3.forward * Time.deltaTime * 10f);
+        transform.Translate(Vector3.forward * Time.deltaTime * 20f);
     }
 
 
@@ -45,6 +45,6 @@ public class Bullets : MonoBehaviour
     {
         var targettedPoint = target.position;
         targettedPoint.y = 10;
-        transform.DOMove(targettedPoint,   15f).SetSpeedBased().OnComplete(()=>startMoveForward = true).SetEase(Ease.Linear); 
+        transform.DOMove(targettedPoint,   50f).SetSpeedBased().OnComplete(()=>startMoveForward = true).SetEase(Ease.Linear); 
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using Lean.Pool;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -29,6 +31,11 @@ public class EnemyBrain : MonoBehaviour
         GameManager.Instance.OnPlayerLost += PlayerLost;
     }
 
+    private void OnEnable()
+    {
+        cantMove = false; 
+    }
+
     private void OnDisable()
     {
         GameManager.Instance.OnPlayerLost -= PlayerLost;
@@ -36,20 +43,38 @@ public class EnemyBrain : MonoBehaviour
 
     private void PlayerLost()
     {
+        if (cantMove)
+            return;
         DisableEnemy();
         enemyAnimationController.PlayEnemyWinAnimation();
     }
 
     public void EnemyDied()
     {
+        if (cantMove)
+            return;
         DisableEnemy();
         ragdollOperations.DoRagdoll(true);
+        DOVirtual.DelayedCall(3, () => ragdollOperations.ChangeLayerToDead()).OnComplete(()=>DOVirtual.DelayedCall(1f, () =>
+        {
+            PlayerManager.Instance.RemoveEnemy(enemyCollider);
+            GameManager.Instance.IncreaseKillCount();
+            LeanPool.Despawn(gameObject);
+            ragdollOperations.ResetCharacter();
+            cantMove = false; 
+            targets.Clear();
+            navMeshAgent.speed = 3.5f;
+            enemyCollider.gameObject.SetActive(true);
+            enemyAnimationController.PlayIdleAnimation();
+            currentSettedTarget = null; 
+        }));
+      
     }
 
     private void DisableEnemy()
     {
         cantMove = true;
-        navMeshAgent.speed = 0; 
+        navMeshAgent.speed = 0;
         enemyCollider.gameObject.SetActive(false);
         PlayerManager.Instance.RemoveEnemy(enemyCollider);
     }

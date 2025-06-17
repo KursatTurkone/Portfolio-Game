@@ -50,6 +50,8 @@ public class PlayerWalkControl : MonoBehaviour
                 Quaternion targetRotation = rotationDelta * transform.rotation;
 
                 float rotationSpeed = 360f;
+                targetRotation.x = 0;
+                targetRotation.z = 0;
                 transform.rotation =
                     Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }

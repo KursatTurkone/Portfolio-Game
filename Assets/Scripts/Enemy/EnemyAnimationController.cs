@@ -54,7 +54,9 @@ public class EnemyAnimationController : MonoBehaviour
     {
         if (animancer != null)
         {
-            animancer.Play(winAnimation,.3f);
+            if (animancer.IsPlaying(winAnimation))
+                return;
+            animancer.Play(winAnimation,1f);
         }
     }
 }
